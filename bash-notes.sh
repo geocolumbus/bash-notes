@@ -71,8 +71,20 @@ function other_say() {
   echo "He also said ${arr[0]}."
 }
 
-read -r -a textArray -p "Say what? "
+# read -r -a textArray -p "Say what? "
+textArray=('This','is','a','sentence')
 function_say "${textArray[@]}"
 other_say "${textArray[@]}"
 
 ### Files ####################################################################
+
+for filename in ./*; do
+  echo "-> $filename"
+done;
+
+### Date and Time #############################################################
+#
+# man strftime shows the date formats.
+echo "The month is `date +%B`."
+
+
