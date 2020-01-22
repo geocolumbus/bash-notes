@@ -50,13 +50,33 @@ do
   if [[ $i == 103 ]]; then break; fi
 done
 
+j=3
+sum=0
+while [[ $j > 0 ]]; do
+  $(( sum+=j ))
+  $(( j-- ))
+done
+echo "Sum = $sum"
+
 ### Functions #################################################################
 
 function_say () {
-  echo "He said \"$1\""
+  arr="$@"
+  text=""
+  for word in ${arr[@]}; do
+    text=$text$word" "
+  done
+  echo "He said $text."
 }
 
-read -p "Say what?" wutsaid
-function_say $wutSaid
+function other_say {
+  arr="$@"
+  echo "He also said ${arr[0]}."
+}
 
+read -a textArray -p "Say what? "
+function_say "${textArray[@]}"
+other_say "${textArray[@]}"
+
+### Arrays ####################################################################
 
