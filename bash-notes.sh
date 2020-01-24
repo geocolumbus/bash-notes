@@ -6,6 +6,8 @@ echo "You passed in $1."
 
 ### branching #################################################################
 
+printf "\n-----------------\n"
+
 if [ "$1" == "george" ]; then
   echo "And it was George too."
 else
@@ -29,6 +31,8 @@ alex)
 esac
 
 ### Looping ###################################################################
+
+printf "\n-----------------\n"
 
 for i in {0..2}; do echo "Number: $i"; done
 
@@ -57,6 +61,8 @@ echo "Sum = $sum"
 
 ### Functions #################################################################
 
+printf "\n-----------------\n"
+
 function_say() {
   arr=("$@")
   text=""
@@ -78,13 +84,64 @@ other_say "${textArray[@]}"
 
 ### Files ####################################################################
 
+printf "\n-----------------\n"
+
 for filename in ./*; do
   echo "-> $filename"
 done;
 
 ### Date and Time #############################################################
-#
-# man strftime shows the date formats.
-echo "The month is `date +%B`."
 
+printf "\n-----------------\n"
 
+# yyyy-mm-dd-hh-mm-ss-zone
+echo "`date +%F-%I-%M-%S-%Z`"
+
+# Friday, January 24th, 2020
+postFix="th"
+month=`date +%e`
+if [[ $month == 1 || $month == 21 || $month == 31 ]]; then postFix="st"; fi
+if [[ $month == 2 || $month == 22 ]]; then postFix="nd"; fi
+if [[ $month == 3 || $month == 23 ]]; then postFix="rd"; fi
+echo "`date '+%A, %B %e'`"$postFix"`date '+, %Y'`"
+echo "`date '+%A, %B %e'`"$postFix"`date '+, %Y %l:%M %p'`"
+
+# ISO Date
+date -u '+%FT%T%Z'
+date '+%FT%T%Z'
+date '+%FT%T%z'
+
+# 5:34 pm
+date '+%l:%M %p'
+date +%T
+
+# Seconds since Unix epoch
+date +%s
+
+# Convert ISO to default
+date -j -f '%Y-%m-%dT%H:%M:%S%z' 2020-01-24T14:20:12-0500
+
+# Convert ISO to mm/dd/yy format
+date -j -f '%Y-%m-%dT%H:%M:%S%z' 2020-01-24T14:20:12-0500 +%D
+
+# Get Timezone from date
+date -j -f '%Y-%m-%dT%H:%M:%S%z' 2020-01-24T14:20:12-0500 +%Z
+
+### printf ####################################################################
+
+# see https://alvinalexander.com/programming/printf-format-cheat-sheet
+
+printf "\n-----------------\n"
+
+printf '%8.2f  %08.2f %0x %0x \n' 10.3456 10.3456 255 "$(( 2**32 ))"
+
+largest=`printf "%0x\n" "$(( 2**64-1 ))"`
+largestChars=${#largest}
+printf "2**64-1 in hex is %s and has %d characters\n" $largest $largestChars
+
+### Arrays ####################################################################
+
+printf "\n-----------------\n"
+
+letter_combos=({A..Z}{A..Z})
+echo ${letter_combos[@]}
