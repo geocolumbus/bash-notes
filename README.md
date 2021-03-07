@@ -2,10 +2,10 @@
 
 ## Usage
 
-```bash
-git clone https://github.com/geocolumbus/bash-notes.git
-./bash-notes
-```
+    git clone https://github.com/geocolumbus/bash-notes.git
+
+    bash ./bash-notes george
+
 
 ## Reference
 

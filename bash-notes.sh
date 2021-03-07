@@ -5,16 +5,39 @@
 echo "You passed in $1."
 
 ### branching #################################################################
-
+#
+# See http://mywiki.wooledge.org/BashFAQ/031 for diff between [ ] and [[ ]]
+#
 printf "\n-----------------\n"
 
+# POSIX single bracket
+# Expands words so must double quote, like"$1"
+# string comparison   \>, \<, =, !=
+# integer comparison  -gt, -lt, -ge, -le, -eq, -ne
+# conditional         -a, -o
+# pattern matching    n/a
+# regex matching      n/a
 if [ "$1" == "george" ]; then
-  echo "And it was George too."
+  echo "Name is \"george\""
 else
   echo "It was not George."
 fi
 
-if [ $1 == "alex" ]; then echo "And it was Alex too."; else echo "It was not Alex."; fi
+# BASH double brackets
+# Does not expand words, so do not need to double quote, like $1
+# string comparison   >, <, == (or =), !=
+# integer comparison  -gt, -lt, -ge, -le, -eq, -ne
+# conditional         &&, ||
+# pattern matching    == (or =)
+# regex matching      =~
+# files              -e (exists), -nt, -ot (newer older than), -ef (same), ! (not same)
+if [[ $1 == "george" ]]; then # BASH double brackets
+  echo "george -> the bash way"
+else
+  echo "not george -> the bash way"
+fi
+
+if [[ $1 == "alex" ]]; then echo "And it was Alex too."; else echo "It was not Alex."; fi
 
 case "$1" in
 george)
@@ -138,10 +161,70 @@ printf '%8.2f  %08.2f %0x %0x \n' 10.3456 10.3456 255 "$(( 2**32 ))"
 largest=`printf "%0x\n" "$(( 2**64-1 ))"`
 largestChars=${#largest}
 printf "2**64-1 in hex is %s and has %d characters\n" $largest $largestChars
+printf "2**7-1 in decimal is %d\n" $(( 2**7-1 ))
+printf "2**15-1 in decimal is %d\n" $(( 2**15-1 ))
+printf "2**31-1 in decimal is %d\n" $(( 2**31-1 ))
+printf "2**63-1 in decimal is %d\n" $(( 2**63-1 ))
+printf "2**63 in decimal is %d\n" $(( 2**63 ))
+
 
 ### Arrays ####################################################################
 
 printf "\n-----------------\n"
 
-letter_combos=({A..Z}{A..Z})
-echo ${letter_combos[@]}
+array=(one two three four [5]=five)
+
+echo "Array size: ${#array[*]}"
+
+echo "Array items:"
+for item in ${array[*]}
+do
+    printf "   %s\n" $item
+done
+
+echo "Array indexes:"
+for index in ${!array[*]}
+do
+    printf "   %d\n" $index
+done
+
+echo "Array items and indexes:"
+for index in ${!array[*]}
+do
+    printf "%4d: %s\n" $index ${array[$index]}
+done
+
+echo "---"
+
+array=("first item" "second item" "third" "item")
+
+echo "Number of items in original array: ${#array[*]}"
+for ix in ${!array[*]}
+do
+    printf "   %s\n" "${array[$ix]}"
+done
+echo
+
+arr=(${array[*]})
+echo "After unquoted expansion: ${#arr[*]}"
+for ix in ${!arr[*]}
+do
+    printf "   %s\n" "${arr[$ix]}"
+done
+echo
+
+arr=("${array[*]}")
+echo "After * quoted expansion: ${#arr[*]}"
+for ix in ${!arr[*]}
+do
+    printf "   %s\n" "${arr[$ix]}"
+done
+echo
+
+arr=("${array[@]}")
+echo "After @ quoted expansion: ${#arr[*]}"
+for ix in ${!arr[*]}
+do
+    printf "   %s\n" "${arr[$ix]}"
+done
+
