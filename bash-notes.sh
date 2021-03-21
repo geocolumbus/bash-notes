@@ -4,6 +4,53 @@
 
 echo "You passed in $1."
 
+### expansions ################################################################
+
+# in precedence order....
+
+# brace
+
+echo a{b,c,e}e  # abe ace aee
+mkdir ./{one,two,three}
+rm -r ./{one,two,three}
+
+# tilde
+
+echo ~      # /Users/georgecampbell
+echo $HOME  # /Users/georgecampbell
+echo ~+     # /usr/bin
+pwd         # /usr/bin
+
+# shell parameter
+
+string=0123456789
+echo ${string:7}    # 789
+echo ${string:7:2}  # 78
+
+set -- george
+echo ${1:3:2}  # rg
+
+set -- one two three four
+echo ${@:0}    # /bin/zsh
+echo ${@:1:2}  # one two
+
+# command substitution
+
+echo The files are:"\n"$(ls)  # The files...
+echo The path is:"\n"`pwd`    # The path...
+
+# arithmetic expansion
+
+echo $((9*8+3))  # 75
+
+# process substitution
+
+comm -3 <(sort a | uniq) <(sort b | uniq)
+
+# word splitting
+# filename expansion
+# quote removal
+
 ### branching #################################################################
 #
 # See http://mywiki.wooledge.org/BashFAQ/031 for diff between [ ] and [[ ]]
